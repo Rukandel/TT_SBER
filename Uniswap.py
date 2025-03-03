@@ -5,7 +5,7 @@ import matplotlib.dates as mdates
 from datetime import datetime, timedelta
 
 
-# Функция для запроса данных из The Graph
+# запрос данных из The Graph
 def fetch_swap_data(pool_id, start_timestamp, end_timestamp):
     query = """
     {
@@ -45,7 +45,7 @@ def fetch_swap_data(pool_id, start_timestamp, end_timestamp):
         return []
 
 
-# Функция для преобразования данных в DataFrame
+# преобразование данных в DataFrame
 def prepare_data(swaps):
     data = []
     for swap in swaps:
@@ -60,7 +60,7 @@ def prepare_data(swaps):
     return df
 
 
-# Функция для построения свечного графика
+# построение свечного графика
 def plot_candlestick(df):
     df.set_index('timestamp', inplace=True)
     df_resampled = df['price'].resample('3T').ohlc()
@@ -78,7 +78,7 @@ def plot_candlestick(df):
     plt.show()
 
 
-# Основная функция
+
 def main():
     pools = {
         'v3_0x4e68Ccd3E89f51C3074ca5072bbAC773960dFa36': '0x4e68Ccd3E89f51C3074ca5072bbAC773960dFa36',
