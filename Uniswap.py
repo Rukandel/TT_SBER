@@ -78,6 +78,20 @@ def plot_candlestick(df):
     plt.show()
 
 
+# обработка данных для каждого пула
+def process_pool_data(pools, start_timestamp, end_timestamp):
+    all_data = pd.DataFrame()
+
+    for pool_name, pool_id in pools.items():
+        print(f"Fetching data for pool: {pool_name}")
+        swaps = fetch_swap_data(pool_id, start_timestamp, end_timestamp)
+        if swaps:
+            df = prepare_data(swaps)
+            df['pool'] = pool_name
+            all_data = pd.concat([all_data, df])
+
+    return all_data
+
 
 def main():
     pools = {
@@ -90,15 +104,7 @@ def main():
     start_timestamp = int(datetime(2023, 11, 27).timestamp())
     end_timestamp = int((datetime(2023, 11, 27) + timedelta(days=1)).timestamp())
 
-    all_data = pd.DataFrame()
-
-    for pool_name, pool_id in pools.items():
-        print(f"Fetching data for pool: {pool_name}")
-        swaps = fetch_swap_data(pool_id, start_timestamp, end_timestamp)
-        if swaps:
-            df = prepare_data(swaps)
-            df['pool'] = pool_name
-            all_data = pd.concat([all_data, df])
+    all_data = process_pool_data(pools, start_timestamp, end_timestamp)
 
     if not all_data.empty:
         plot_candlestick(all_data)
